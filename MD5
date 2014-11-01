@@ -1,0 +1,10 @@
+81930dfdc4494f4bfea0159b32e5e9ed *DESCRIPTION
+3d55ef9a10c04c95a867277c02d32bca *LICENSE
+6c9d359b8c78c7c88218f733897ad5cf *NAMESPACE
+d730f349ca5d90b9d6384c65c937135f *R/disposable.r
+7e2ef2036254b6a5722a316bff036a31 *README.md
+a483da7e6dd3773d1492043d09d880d9 *man/dispose_packages.Rd
+3f85aa7d2d5105b7226ff98b22025057 *man/make_packages.Rd
+d952c2a51bf869290181a499d60b5519 *tests/testthat.R
+1f6e14d89c8bae0c9a14db1cccf43a90 *tests/testthat/test-cleanup.R
+067dd73b5f14003bc88e34ffc92e386d *tests/testthat/test-myself.R
