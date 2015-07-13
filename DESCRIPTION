@@ -1,7 +1,8 @@
 Package: disposables
 Title: Create Disposable R Packages for Testing
-Version: 1.0.0
-Authors@R: "Gabor Csardi <csardi.gabor@gmail.com> [aut, cre]"
+Version: 1.0.1
+Author: Gabor Csardi
+Maintainer: Gabor Csardi <csardi.gabor@gmail.com>
 Description: Create disposable R packages for testing.
     You can create, install and load multiple R packages with a single
     function call, and then unload, uninstall and destroy them with another
@@ -10,12 +11,11 @@ Description: Create disposable R packages for testing.
 License: MIT + file LICENSE
 LazyData: true
 URL: https://github.com/gaborcsardi/disposables
-BugReports: https://github.com/gaborcsardi/disposables
+BugReports: https://github.com/gaborcsardi/disposables/issues
+Imports: utils
 Suggests: testthat
 Depends: methods
-Packaged: 2014-11-01 19:51:19 UTC; gaborcsardi
-Author: "Gabor Csardi" [aut, cre]
-Maintainer: "Gabor Csardi" <csardi.gabor@gmail.com>
 NeedsCompilation: no
+Packaged: 2015-07-13 02:00:05 UTC; gaborcsardi
 Repository: CRAN
-Date/Publication: 2014-11-02 00:52:00
+Date/Publication: 2015-07-13 04:11:32

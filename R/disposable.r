@@ -11,6 +11,8 @@ with_wd <- function(dir, expr) {
   eval(substitute(expr), envir = parent.frame())
 }
 
+#' @importFrom utils tar
+
 build_pkg <- function(path, pkg_file = NULL) {
   if (!file.exists(path)) stop("path does not exist")
   pkg_name <- basename(path)
@@ -22,7 +24,7 @@ build_pkg <- function(path, pkg_file = NULL) {
   pkg_file
 }
 
-#' @importFrom utils package.skeleton
+#' @importFrom utils package.skeleton install.packages
 
 install_tmp_pkg <- function(..., pkg_name, lib_dir, imports = character()) {
   if (!file.exists(lib_dir)) stop("lib_dir does not exist")
@@ -67,6 +69,14 @@ install_tmp_pkg <- function(..., pkg_name, lib_dir, imports = character()) {
   ## Build it
   pkg_file <- build_pkg(pkg_dir)
 
+  ## Need to unset R_TESTS. This is set during R CMD check
+  ## and it messes up things
+  if ("R_TESTS" %in% names(Sys.getenv())) {
+    R_TESTS <- Sys.getenv("R_TESTS")
+    on.exit(Sys.setenv(R_TESTS = R_TESTS), add = TRUE)
+    Sys.unsetenv("R_TESTS")
+  }
+
   ## Install it into the supplied lib_dir
   install.packages(pkg_file, lib = lib_dir, repos = NULL, type = "source",
                    quiet = install_quietly)
@@ -110,10 +120,8 @@ with_libpath <- function(lib_path, ...) {
 #'     \item \code{package} The named of the packages.
 #'   }
 #'
-#' @export
-#' @seealso \code{\link{dispose_packages}}
-#' @examples
-#' \donttest{
+#' @section Examples:
+#' \preformatted{
 #' pkg <- make_packages(
 #'   foo1 = { f <- function() print("hello!") ; d <- 1:10 },
 #'   foo2 = { f <- function() print("hello again!") ; d <- 11:20 }
@@ -124,6 +132,9 @@ with_libpath <- function(lib_path, ...) {
 #' foo2::d
 #' dispose_packages(pkg)
 #' }
+#' 
+#' @export
+#' @seealso \code{\link{dispose_packages}}
 
 make_packages <- function(..., lib_dir = tempfile(),
                           imports = character()) {
@@ -164,9 +175,8 @@ make_packages <- function(..., lib_dir = tempfile(),
 #'   this should be \code{TRUE} as well.
 #' @param delete_lib_dir Whether to delete the the whole \code{lib_dir}.
 #'
-#' @export
-#' @examples
-#' \donttest{
+#' @section Examples:
+#' \preformatted{
 #' pkg <- make_packages(
 #'   foo1 = { f <- function() print("hello!") ; d <- 1:10 },
 #'   foo2 = { f <- function() print("hello again!") ; d <- 11:20 }
@@ -179,22 +189,24 @@ make_packages <- function(..., lib_dir = tempfile(),
 #'
 #' ## Unattach only
 #' dispose_packages(pkg, unload = FALSE, delete = FALSE)
-#' "package:foo1" %in% search()
-#' "foo1" %in% loadedNamespaces()
+#' "package:foo1" \%in\% search()
+#' "foo1" \%in\% loadedNamespaces()
 #' dir(pkg$lib_dir)
 #'
 #' ## Unload
 #' dispose_packages(pkg, delete = FALSE)
-#' "package:foo1" %in% search()
-#' "foo1" %in% loadedNamespaces()
+#' "package:foo1" \%in\% search()
+#' "foo1" \%in\% loadedNamespaces()
 #' dir(pkg$lib_dir)
 #'
 #' ## Delete completely
 #' dispose_packages(pkg)
-#' "package:foo1" %in% search()
-#' "foo1" %in% loadedNamespaces()
+#' "package:foo1" \%in\% search()
+#' "foo1" \%in\% loadedNamespaces()
 #' file.exists(pkg$lib_dir)
 #' }
+#'
+#' @export
 
 dispose_packages <- function(packages, unattach = TRUE, unload = unattach,
                              delete = TRUE, delete_lib_dir = delete) {
